@@ -19,7 +19,7 @@ public class P1DemoBackendApplication {
 
 		System.out.println("Video Game Management App is running");
 
-		System.out.println("Made a push to the repo, triggering a Jenkins build");
+		System.out.println("Made a push to the repo, triggering a Jenkins build!");
 
 	}
 
