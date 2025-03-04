@@ -11,5 +11,6 @@ createRoot(document.getElementById('root')!).render(
     <AuthProvider>
       <App />
     </AuthProvider>
+    {/* What if we DIDN'T want each component to get this? We could wrap more granularly in the App.tsx itself */}
   </StrictMode>,
 )

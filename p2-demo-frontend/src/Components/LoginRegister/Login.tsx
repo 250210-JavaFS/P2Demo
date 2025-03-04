@@ -3,8 +3,14 @@ import { useEffect, useRef, useState } from "react";
 import { Button, Container, Form } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
 import { store } from "../../GlobalData/store";
+import { useAuth } from "../../GlobalData/AuthContext";
 
 export const Login:React.FC = () => {
+
+    //!NEW! Context API!!!!
+    //This is the hook we created in AuthContext.tsx
+    //We want this component to be able to get and set loggedInUser data
+    const {loggedInUser, setLoggedInUser} = useAuth()
 
     //we can use the useNavigate hook to navigate between components programatically
         //(no more manual URL changing)
@@ -51,15 +57,29 @@ export const Login:React.FC = () => {
 
         try{
 
-            const response = await axios.post("http://3.133.155.102:8080/auth/login", loginCreds, {withCredentials:true})
+            //EC2 AXIOS REQUEST
+//          const response = await axios.post("http://3.133.155.102:8080/auth/login",           loginCreds, {withCredentials:true})
+
+            const response = await axios.post("http://localhost:8081/auth/login",           loginCreds, {withCredentials:true})
             //withCredentials lets us interact with sessions on the backend
             //every request that depends on the user being logged in, being an admin, etc, needs this
 
+            //!NEW! Context API!
+            
+            //Setting the logged in User data thanks to useAuth 
+            setLoggedInUser(response.data)
+
+            console.log(loggedInUser)
+
+            alert("Welcome " + loggedInUser?.username)
+
+            /* OLD - store.ts, before Context API
             //if the catch doesn't run, login was successful! save the data to our global store, then switch components
             store.loggedInUser = response.data //this is our logged in user data from the backend
 
             //greet the user with this newly stored data
             alert(store.loggedInUser.username + " has logged in! Welcome.")
+            */
 
             //users will get sent to users component if they're an "admin", or the games component if they're a "user"
             if(store.loggedInUser.role === "admin"){
