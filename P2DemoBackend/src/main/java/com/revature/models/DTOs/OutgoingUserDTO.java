@@ -5,12 +5,14 @@ package com.revature.models.DTOs;
 
 import com.revature.models.User;
 
+import java.util.UUID;
+
 //In this case, we want to send User info without including that raw password
 //Yes, we could have just made a different constructor in the User class
     //Check the videogame DTOs for more interesting uses of DTOs
 public class OutgoingUserDTO {
 
-    private int userId;
+    private UUID userId;
     private String username;
     private String role;
 
@@ -20,7 +22,7 @@ public class OutgoingUserDTO {
     public OutgoingUserDTO() {
     }
 
-    public OutgoingUserDTO(int userId, String username, String role) {
+    public OutgoingUserDTO(UUID userId, String username, String role) {
         this.userId = userId;
         this.username = username;
         this.role = role;
@@ -34,11 +36,11 @@ public class OutgoingUserDTO {
         this.role = u.getRole();
     }
 
-    public int getUserId() {
+    public UUID getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(UUID userId) {
         this.userId = userId;
     }
 

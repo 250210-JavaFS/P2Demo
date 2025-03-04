@@ -3,14 +3,16 @@ package com.revature.models;
 import jakarta.persistence.*;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component //Make the class a bean
 @Entity //This makes the class a DB entity
 @Table(name = "video_games")
 public class VideoGame {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int gameId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID gameId;
 
     @Column(nullable = false) //every game must have a title
     private String title;
@@ -41,18 +43,18 @@ public class VideoGame {
     public VideoGame() {
     }
 
-    public VideoGame(int gameId, String title, String genre, User user) {
+    public VideoGame(UUID gameId, String title, String genre, User user) {
         this.gameId = gameId;
         this.title = title;
         this.genre = genre;
         this.user = user;
     }
 
-    public int getGameId() {
+    public UUID getGameId() {
         return gameId;
     }
 
-    public void setGameId(int gameId) {
+    public void setGameId(UUID gameId) {
         this.gameId = gameId;
     }
 

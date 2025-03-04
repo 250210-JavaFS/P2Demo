@@ -34,7 +34,7 @@ public class VideoGameService {
             //0 for id since the DB will handle that
             //null for the User since we need to get it first
         VideoGame newGame = new VideoGame(
-            0,
+            null,
             gameDTO.getTitle(),
             gameDTO.getGenre(),
             null
