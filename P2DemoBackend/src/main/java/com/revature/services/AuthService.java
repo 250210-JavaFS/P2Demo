@@ -5,6 +5,7 @@ import com.revature.models.DTOs.LoginDTO;
 import com.revature.models.DTOs.OutgoingUserDTO;
 import com.revature.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 //The Service layer is where we put our business logic
@@ -15,17 +16,22 @@ public class AuthService {
     //Services talk to DAOs, so let's autowire the UserDAO so we can use its methods
     private final UserDAO userDAO;
 
+    //We also need to autowire the password encoder to encrypt passwords
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
-    public AuthService(UserDAO userDAO){
+    public AuthService(UserDAO userDAO, PasswordEncoder passwordEncoder){
         this.userDAO = userDAO;
         //Spring will create an instantiation of this DAO for us
+        this.passwordEncoder = passwordEncoder;
     }
 
     //This method will take a User object and send it to the DAO
     //It will also return the inserted User to the Controller
     public OutgoingUserDTO registerUser(User user){
 
-        //TODO: input validation - Tuesday
+        //PASSWORD ENCRYPTION---
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         //We use the save() method to insert data into the DB
         //save() is one of the methods we inherited from JpaRepository

@@ -71,8 +71,8 @@ public class WebSecurityConfig {
 
     //This method is used to configure the security filters, session management, and URL privileges
     /* The most important things to note here are:
-           -we set all requests to /auth or a POST /users to be accessible by anybody (login and register)
-                -only managers can access /users (except for POSTs)
+           -we set all requests to /auth to be accessible to anybody (login and register)
+                -only managers can access /users
                 -any logged in user can access any other endpoint (implied by anyRequest().authenticated())
            -we set all non login/register requests to require authentication (a valid JWT, gained from login)
            -we set the session management to be stateless (no session data is stored)
