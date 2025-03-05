@@ -21,4 +21,7 @@ public interface UserDAO extends JpaRepository<User, UUID> {
     //If it returns a User object, the user exists and login succeeds
     public Optional<User> findByUsernameAndPassword(String username, String password);
 
+    //We're using this in WebSecurityConfig to authenticate users
+    public User findByUsername(String username);
+
 }
