@@ -3,10 +3,14 @@ package com.revature.controllers;
 import com.revature.models.DTOs.LoginDTO;
 import com.revature.models.DTOs.OutgoingUserDTO;
 import com.revature.models.User;
+import com.revature.security.JwtTokenUtil;
 import com.revature.services.AuthService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 //AuthController? Think AUTHentication/AUTHorization
@@ -21,10 +25,17 @@ public class AuthController {
     //autowire the AuthService to use its methods
     private final AuthService authService;
 
+    //We also need to autowire the JWTTokenUtil and the AuthenticationManager
+    private final JwtTokenUtil jwtTokenUtil;
+    private final AuthenticationManager authenticationManager;
+
     @Autowired
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, JwtTokenUtil jwtTokenUtil, AuthenticationManager authenticationManager) {
         this.authService = authService;
+        this.jwtTokenUtil = jwtTokenUtil;
+        this.authenticationManager = authenticationManager;
     }
+
 
     //Insert a new user (POST request)
     @PostMapping("/register") //Requests ending in /auth/register will invoke this method
@@ -41,8 +52,27 @@ public class AuthController {
 
     //Login (POST request)
     @PostMapping("/login")
-    public ResponseEntity<OutgoingUserDTO> login(@RequestBody LoginDTO loginDTO, HttpSession session){
+    public ResponseEntity<OutgoingUserDTO> login(@RequestBody LoginDTO loginDTO, AuthenticationManager authManager){
 
+        //NOTE: No more explicit session handling, and no more talking to the service layer!
+
+        //attempt to log in
+        try{
+            //The AuthenticationManager from Spring Security is now in charge of username/password checks
+            Authentication auth = authManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword())
+            );
+
+            //If the auth is successful, build a user object based on the logged in user data
+            User loggedInUser = (User) auth.getPrincipal();
+
+            //Finally, generate a JWT! The user will use this in subsequent requests
+            String jwt = jwtTokenUtil.
+        }
+
+
+
+        /*
         //NOTE: we have an HttpSession coming in through parameters, implicitly included in every HTTP request
         //Login is where we set it up
 
@@ -67,11 +97,11 @@ public class AuthController {
             -simplify and secure our URLs!
                 -ex: use the stored userId in "findXByUserId" methods instead of sending it in the PATH
                 -This cleans up our URLs and secures them a bit more too.
-           */
 
         //Return the User info to the client
         return ResponseEntity.ok(loggedInUser);
 
+        */
     }
 
 }
