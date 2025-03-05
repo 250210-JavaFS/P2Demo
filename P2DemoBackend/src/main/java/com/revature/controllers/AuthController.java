@@ -52,14 +52,14 @@ public class AuthController {
 
     //Login (POST request)
     @PostMapping("/login")
-    public ResponseEntity<OutgoingUserDTO> login(@RequestBody LoginDTO loginDTO, AuthenticationManager authManager){
+    public ResponseEntity<OutgoingUserDTO> login(@RequestBody LoginDTO loginDTO){
 
         //NOTE: No more explicit session handling, and no more talking to the service layer!
 
         //attempt to log in
         try{
             //The AuthenticationManager from Spring Security is now in charge of username/password checks
-            Authentication auth = authManager.authenticate(
+            Authentication auth = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword())
             );
 
@@ -67,10 +67,25 @@ public class AuthController {
             User loggedInUser = (User) auth.getPrincipal();
 
             //Finally, generate a JWT! The user will use this in subsequent requests
-            String jwt = jwtTokenUtil.
+            String jwt = jwtTokenUtil.generateAccessToken(loggedInUser);
+
+            System.out.println(jwt);
+
+            //send JWT back with the user info
+            return ResponseEntity.ok().body(
+                    new OutgoingUserDTO(
+                            loggedInUser.getUserId(),
+                            loggedInUser.getUsername(),
+                            loggedInUser.getRole(),
+                            jwt
+                    )
+                    //TODO: other constructor that takes User + jwt
+            );
+
+        } catch (Exception e){
+            e.printStackTrace();
+            return null;
         }
-
-
 
         /*
         //NOTE: we have an HttpSession coming in through parameters, implicitly included in every HTTP request

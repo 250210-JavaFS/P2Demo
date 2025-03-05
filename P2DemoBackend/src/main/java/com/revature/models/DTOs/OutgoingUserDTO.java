@@ -16,6 +16,9 @@ public class OutgoingUserDTO {
     private String username;
     private String role;
 
+    //This field will store the JWT to be used in subsequent requests
+    private String jwt;
+
     //boilerplate----------------------
 
 
@@ -26,6 +29,14 @@ public class OutgoingUserDTO {
         this.userId = userId;
         this.username = username;
         this.role = role;
+    }
+
+    //This constructor will be used after successful login (sends the JWT)
+    public OutgoingUserDTO(UUID userId, String username, String role, String jwt) {
+        this.userId = userId;
+        this.username = username;
+        this.role = role;
+        this.jwt = jwt;
     }
 
     //see this in use in get all users in UserService
@@ -58,6 +69,14 @@ public class OutgoingUserDTO {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getJwt() {
+        return jwt;
+    }
+
+    public void setJwt(String jwt) {
+        this.jwt = jwt;
     }
 
     @Override
