@@ -26,10 +26,12 @@ export const UserTable:React.FC = () => {
     //Function to get all users from the backend (HTTP request!)
     const getAllUsers = async () => {
 
+        console.log(loggedInUser?.jwt)
+
         try{
             const response = await axios.get("http://localhost:8081/users", {
                 headers: {
-                    'Authorization':`Bearer ${loggedInUser?.token}`
+                    'Authorization':`Bearer ${loggedInUser?.jwt}`
                 }
             })
             //no withCredentials - that's for session-based architectures
