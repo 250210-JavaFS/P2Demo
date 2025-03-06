@@ -82,7 +82,7 @@ export const Login:React.FC = () => {
             */
 
             //users will get sent to users component if they're an "admin", or the games component if they're a "user"
-            if(store.loggedInUser.role === "admin"){
+            if(loggedInUser?.role === "manager"){
                 navigate("/users")
             } else {
                 navigate("/games")

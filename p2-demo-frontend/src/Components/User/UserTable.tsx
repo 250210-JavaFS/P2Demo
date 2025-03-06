@@ -2,11 +2,15 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import { Button, Container, Table } from "react-bootstrap"
 import { User } from "../../Interfaces/User"
+import { useAuth } from "../../GlobalData/AuthContext"
 
 export const UserTable:React.FC = () => {
 
     //state object to store the User Array from the backend
     const [users, setUsers] = useState<User[]>([])
+
+    //This component only needs GET access to user info, not SET access
+    const {loggedInUser} = useAuth()
 
 
     //useEffect - we'll call a GET request for all users when the component loads
@@ -23,8 +27,13 @@ export const UserTable:React.FC = () => {
     const getAllUsers = async () => {
 
         try{
-            const response = await axios.get("http://3.133.155.102:8080/users", {withCredentials:true})
-            //Again, we need withCredentials if the request requires specific session info (existence of a session, role stored in the session, etc)
+            const response = await axios.get("http://localhost:8081/users", {
+                headers: {
+                    'Authorization':`Bearer ${loggedInUser?.token}`
+                }
+            })
+            //no withCredentials - that's for session-based architectures
+            //now, we're sending the JWT in the auth header instead to verify the user
 
             //TODO: error throwing code
 

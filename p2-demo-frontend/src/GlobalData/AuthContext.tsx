@@ -9,6 +9,7 @@ interface LoggedInUser{
     userId:string;
     username:string;
     role:string;
+    token:string;
 }
 
 //Define an AuthContextType interface to define initial state and a mutator for user data
